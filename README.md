@@ -29,7 +29,23 @@ the LUT headroom the synthesis table below shows:
 
 ## Hardware
 
-![Block Layout](./diagrams/blockdiagram.svg)
+```mermaid
+flowchart LR
+    SD[("SD Card")]
+    LED[["WS2812B<br/>ARGB LEDs"]]
+
+    subgraph FPGA["FPGA — Gowin GW1NR-9C / Tang Nano 9k"]
+        direction LR
+        SDIF["SDCard<br/>Interface"]
+        CPU["RISCV Core<br/>VexRiscv"]
+        GAMMA["Gamma LUT"]
+        WS["WS2812<br/>Driver"]
+        SDIF --> CPU --> GAMMA --> WS
+    end
+
+    SD -- SPI --> SDIF
+    WS -- WS2812 --> LED
+```
 
 - Sipeed Tang Nano 9K (Gowin GW1NR-LV9QN88PC6/I5)
 - A FAT/FAT32-formatted micro-SD card in the board's SPI-mode slot
