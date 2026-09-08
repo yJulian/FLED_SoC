@@ -30,7 +30,8 @@
 `timescale 1ns / 1ps
 
 module led_animator_controller #(
-    parameter SYS_CLK_FREQ_HZ = 27_000_000
+    parameter SYS_CLK_FREQ_HZ = 27_000_000,
+    parameter GAMMA_LUT_FILE  = "gamma_lut.mem" // see rtl/gamma_lut.v -- override with an absolute path
 ) (
     input  wire        clk,
     input  wire        rst_n,
@@ -98,7 +99,9 @@ module led_animator_controller #(
     // ---- gamma_lut instance: single shared combinational lookup, since the
     // byte-stream reader only ever handles one R/G/B byte per cycle ----
     wire [7:0] gamma_byte;
-    gamma_lut u_gamma_lut (
+    gamma_lut #(
+        .GAMMA_LUT_FILE(GAMMA_LUT_FILE)
+    ) u_gamma_lut (
         .in_byte  (cur_byte),
         .out_byte (gamma_byte)
     );

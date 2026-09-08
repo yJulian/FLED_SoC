@@ -122,10 +122,17 @@ frames = 384 bytes) instead.
 - `rtl/ws2812_driver.v` — bit-bangs the WS2812B one-wire protocol from a
   simple pixel valid/ready stream, timed in sys_clk cycles (parameterized
   by `SYS_CLK_FREQ_HZ`), appends the reset/latch pulse automatically.
-- `rtl/gamma_lut.v` — a single-cycle combinational 256-entry gamma=2.8
-  lookup table (`out = round(255*(in/255)^2.8)`, matching common WS2812
-  defaults e.g. FastLED). Shared by all three R/G/B bytes since the
-  byte-stream reader only ever handles one byte per cycle.
+- `rtl/gamma_lut.v` + `rtl/gamma_lut.mem` — a single-cycle combinational
+  256-entry gamma=2.8 lookup table (`out = round(255*(in/255)^2.8)`,
+  matching common WS2812 defaults e.g. FastLED), loaded via `$readmemh`
+  from the `.mem` file (regenerate it for a different gamma). The
+  `GAMMA_LUT_FILE` parameter is threaded through `led_animator_controller.v`
+  and set to an absolute path by both callers (`led_animator_module.py` for
+  hardware, `sim/run_sim.py` for simulation) — `$readmemh` resolves its
+  path relative to the toolchain's cwd at elaboration/runtime, which
+  differs across the Verilator/Gowin/apicula flows this project uses, so a
+  bare relative filename isn't reliable here. Shared by all three R/G/B
+  bytes since the byte-stream reader only ever handles one byte per cycle.
 - `rtl/led_animator_controller.v` — a Wishbone bus-master DMA engine: reads
   the animation byte-by-byte from memory (handles a non-word-aligned start
   address), paces frames to a configured interval (start-to-start timing,

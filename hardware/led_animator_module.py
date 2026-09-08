@@ -59,6 +59,9 @@ class LedAnimator(LiteXModule):
 
         self.specials += Instance("led_animator_controller",
             p_SYS_CLK_FREQ_HZ = int(sys_clk_freq),
+            # Absolute path: $readmemh inside gamma_lut.v resolves it at
+            # elaboration/synthesis time regardless of the toolchain's cwd.
+            p_GAMMA_LUT_FILE = os.path.join(rtl_dir, "gamma_lut.mem"),
 
             i_clk   = ClockSignal("sys"),
             i_rst_n = ~ResetSignal("sys"),

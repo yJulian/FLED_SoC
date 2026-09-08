@@ -48,9 +48,10 @@ ensure_venv()
 # ------------------------------------------------------------------------------
 from cocotb_tools.runner import get_runner
 
-RTL_WS2812   = os.path.join(PROJECT_ROOT, "rtl", "ws2812_driver.v")
-RTL_GAMMA    = os.path.join(PROJECT_ROOT, "rtl", "gamma_lut.v")
-RTL_LED_ANIM = os.path.join(PROJECT_ROOT, "rtl", "led_animator_controller.v")
+RTL_WS2812    = os.path.join(PROJECT_ROOT, "rtl", "ws2812_driver.v")
+RTL_GAMMA     = os.path.join(PROJECT_ROOT, "rtl", "gamma_lut.v")
+RTL_GAMMA_MEM = os.path.join(PROJECT_ROOT, "rtl", "gamma_lut.mem")
+RTL_LED_ANIM  = os.path.join(PROJECT_ROOT, "rtl", "led_animator_controller.v")
 
 def run_ws2812_driver_test(waves=False, clean=False):
     build_dir = os.path.join(SIM_DIR, "build_ws2812")
@@ -90,6 +91,9 @@ def run_led_animator_test(waves=False, clean=False):
         hdl_toplevel="led_animator_controller",
         build_dir=build_dir,
         build_args=["-Wno-fatal", "-Wno-DECLFILENAME", "-Wall"],
+        # Absolute path so $readmemh (in gamma_lut.v) finds the table
+        # regardless of the simulation binary's working directory.
+        parameters={"GAMMA_LUT_FILE": f'"{RTL_GAMMA_MEM}"'},
         waves=waves
     )
     runner.test(
