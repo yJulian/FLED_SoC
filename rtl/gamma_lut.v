@@ -1,0 +1,284 @@
+/*
+ * 8-bit Gamma-Correction Lookup Table (gamma = 2.8)
+ *
+ * WS2812B strips are driven with linear PWM duty cycles, but human
+ * brightness perception is roughly logarithmic -- fed raw linear RGB
+ * bytes, low-brightness colors look washed out/greyish and most of the
+ * visual range gets crammed into the top of the byte range. This table
+ * remaps each linear input byte to a perceptually-corrected output byte
+ * (out = round(255 * (in/255)^2.8), gamma=2.8 matches the common WS2812
+ * default e.g. used by FastLED), synthesized as a small ROM (single-cycle
+ * combinational lookup, no pipeline latency added to the byte-stream
+ * reader in led_animator_controller.v).
+ *
+ * Table generated with: round(255 * (i/255)**2.8) for i in 0..255
+ */
+`timescale 1ns / 1ps
+
+module gamma_lut (
+    input  wire [7:0] in_byte,
+    output reg  [7:0] out_byte
+);
+
+    always @(*) begin
+        case (in_byte)
+            8'd0  : out_byte = 8'd0;
+            8'd1  : out_byte = 8'd0;
+            8'd2  : out_byte = 8'd0;
+            8'd3  : out_byte = 8'd0;
+            8'd4  : out_byte = 8'd0;
+            8'd5  : out_byte = 8'd0;
+            8'd6  : out_byte = 8'd0;
+            8'd7  : out_byte = 8'd0;
+            8'd8  : out_byte = 8'd0;
+            8'd9  : out_byte = 8'd0;
+            8'd10 : out_byte = 8'd0;
+            8'd11 : out_byte = 8'd0;
+            8'd12 : out_byte = 8'd0;
+            8'd13 : out_byte = 8'd0;
+            8'd14 : out_byte = 8'd0;
+            8'd15 : out_byte = 8'd0;
+            8'd16 : out_byte = 8'd0;
+            8'd17 : out_byte = 8'd0;
+            8'd18 : out_byte = 8'd0;
+            8'd19 : out_byte = 8'd0;
+            8'd20 : out_byte = 8'd0;
+            8'd21 : out_byte = 8'd0;
+            8'd22 : out_byte = 8'd0;
+            8'd23 : out_byte = 8'd0;
+            8'd24 : out_byte = 8'd0;
+            8'd25 : out_byte = 8'd0;
+            8'd26 : out_byte = 8'd0;
+            8'd27 : out_byte = 8'd0;
+            8'd28 : out_byte = 8'd1;
+            8'd29 : out_byte = 8'd1;
+            8'd30 : out_byte = 8'd1;
+            8'd31 : out_byte = 8'd1;
+            8'd32 : out_byte = 8'd1;
+            8'd33 : out_byte = 8'd1;
+            8'd34 : out_byte = 8'd1;
+            8'd35 : out_byte = 8'd1;
+            8'd36 : out_byte = 8'd1;
+            8'd37 : out_byte = 8'd1;
+            8'd38 : out_byte = 8'd1;
+            8'd39 : out_byte = 8'd1;
+            8'd40 : out_byte = 8'd1;
+            8'd41 : out_byte = 8'd2;
+            8'd42 : out_byte = 8'd2;
+            8'd43 : out_byte = 8'd2;
+            8'd44 : out_byte = 8'd2;
+            8'd45 : out_byte = 8'd2;
+            8'd46 : out_byte = 8'd2;
+            8'd47 : out_byte = 8'd2;
+            8'd48 : out_byte = 8'd2;
+            8'd49 : out_byte = 8'd3;
+            8'd50 : out_byte = 8'd3;
+            8'd51 : out_byte = 8'd3;
+            8'd52 : out_byte = 8'd3;
+            8'd53 : out_byte = 8'd3;
+            8'd54 : out_byte = 8'd3;
+            8'd55 : out_byte = 8'd3;
+            8'd56 : out_byte = 8'd4;
+            8'd57 : out_byte = 8'd4;
+            8'd58 : out_byte = 8'd4;
+            8'd59 : out_byte = 8'd4;
+            8'd60 : out_byte = 8'd4;
+            8'd61 : out_byte = 8'd5;
+            8'd62 : out_byte = 8'd5;
+            8'd63 : out_byte = 8'd5;
+            8'd64 : out_byte = 8'd5;
+            8'd65 : out_byte = 8'd6;
+            8'd66 : out_byte = 8'd6;
+            8'd67 : out_byte = 8'd6;
+            8'd68 : out_byte = 8'd6;
+            8'd69 : out_byte = 8'd7;
+            8'd70 : out_byte = 8'd7;
+            8'd71 : out_byte = 8'd7;
+            8'd72 : out_byte = 8'd7;
+            8'd73 : out_byte = 8'd8;
+            8'd74 : out_byte = 8'd8;
+            8'd75 : out_byte = 8'd8;
+            8'd76 : out_byte = 8'd9;
+            8'd77 : out_byte = 8'd9;
+            8'd78 : out_byte = 8'd9;
+            8'd79 : out_byte = 8'd10;
+            8'd80 : out_byte = 8'd10;
+            8'd81 : out_byte = 8'd10;
+            8'd82 : out_byte = 8'd11;
+            8'd83 : out_byte = 8'd11;
+            8'd84 : out_byte = 8'd11;
+            8'd85 : out_byte = 8'd12;
+            8'd86 : out_byte = 8'd12;
+            8'd87 : out_byte = 8'd13;
+            8'd88 : out_byte = 8'd13;
+            8'd89 : out_byte = 8'd13;
+            8'd90 : out_byte = 8'd14;
+            8'd91 : out_byte = 8'd14;
+            8'd92 : out_byte = 8'd15;
+            8'd93 : out_byte = 8'd15;
+            8'd94 : out_byte = 8'd16;
+            8'd95 : out_byte = 8'd16;
+            8'd96 : out_byte = 8'd17;
+            8'd97 : out_byte = 8'd17;
+            8'd98 : out_byte = 8'd18;
+            8'd99 : out_byte = 8'd18;
+            8'd100: out_byte = 8'd19;
+            8'd101: out_byte = 8'd19;
+            8'd102: out_byte = 8'd20;
+            8'd103: out_byte = 8'd20;
+            8'd104: out_byte = 8'd21;
+            8'd105: out_byte = 8'd21;
+            8'd106: out_byte = 8'd22;
+            8'd107: out_byte = 8'd22;
+            8'd108: out_byte = 8'd23;
+            8'd109: out_byte = 8'd24;
+            8'd110: out_byte = 8'd24;
+            8'd111: out_byte = 8'd25;
+            8'd112: out_byte = 8'd25;
+            8'd113: out_byte = 8'd26;
+            8'd114: out_byte = 8'd27;
+            8'd115: out_byte = 8'd27;
+            8'd116: out_byte = 8'd28;
+            8'd117: out_byte = 8'd29;
+            8'd118: out_byte = 8'd29;
+            8'd119: out_byte = 8'd30;
+            8'd120: out_byte = 8'd31;
+            8'd121: out_byte = 8'd32;
+            8'd122: out_byte = 8'd32;
+            8'd123: out_byte = 8'd33;
+            8'd124: out_byte = 8'd34;
+            8'd125: out_byte = 8'd35;
+            8'd126: out_byte = 8'd35;
+            8'd127: out_byte = 8'd36;
+            8'd128: out_byte = 8'd37;
+            8'd129: out_byte = 8'd38;
+            8'd130: out_byte = 8'd39;
+            8'd131: out_byte = 8'd39;
+            8'd132: out_byte = 8'd40;
+            8'd133: out_byte = 8'd41;
+            8'd134: out_byte = 8'd42;
+            8'd135: out_byte = 8'd43;
+            8'd136: out_byte = 8'd44;
+            8'd137: out_byte = 8'd45;
+            8'd138: out_byte = 8'd46;
+            8'd139: out_byte = 8'd47;
+            8'd140: out_byte = 8'd48;
+            8'd141: out_byte = 8'd49;
+            8'd142: out_byte = 8'd50;
+            8'd143: out_byte = 8'd50;
+            8'd144: out_byte = 8'd51;
+            8'd145: out_byte = 8'd52;
+            8'd146: out_byte = 8'd54;
+            8'd147: out_byte = 8'd55;
+            8'd148: out_byte = 8'd56;
+            8'd149: out_byte = 8'd57;
+            8'd150: out_byte = 8'd58;
+            8'd151: out_byte = 8'd59;
+            8'd152: out_byte = 8'd60;
+            8'd153: out_byte = 8'd61;
+            8'd154: out_byte = 8'd62;
+            8'd155: out_byte = 8'd63;
+            8'd156: out_byte = 8'd64;
+            8'd157: out_byte = 8'd66;
+            8'd158: out_byte = 8'd67;
+            8'd159: out_byte = 8'd68;
+            8'd160: out_byte = 8'd69;
+            8'd161: out_byte = 8'd70;
+            8'd162: out_byte = 8'd72;
+            8'd163: out_byte = 8'd73;
+            8'd164: out_byte = 8'd74;
+            8'd165: out_byte = 8'd75;
+            8'd166: out_byte = 8'd77;
+            8'd167: out_byte = 8'd78;
+            8'd168: out_byte = 8'd79;
+            8'd169: out_byte = 8'd81;
+            8'd170: out_byte = 8'd82;
+            8'd171: out_byte = 8'd83;
+            8'd172: out_byte = 8'd85;
+            8'd173: out_byte = 8'd86;
+            8'd174: out_byte = 8'd87;
+            8'd175: out_byte = 8'd89;
+            8'd176: out_byte = 8'd90;
+            8'd177: out_byte = 8'd92;
+            8'd178: out_byte = 8'd93;
+            8'd179: out_byte = 8'd95;
+            8'd180: out_byte = 8'd96;
+            8'd181: out_byte = 8'd98;
+            8'd182: out_byte = 8'd99;
+            8'd183: out_byte = 8'd101;
+            8'd184: out_byte = 8'd102;
+            8'd185: out_byte = 8'd104;
+            8'd186: out_byte = 8'd105;
+            8'd187: out_byte = 8'd107;
+            8'd188: out_byte = 8'd109;
+            8'd189: out_byte = 8'd110;
+            8'd190: out_byte = 8'd112;
+            8'd191: out_byte = 8'd114;
+            8'd192: out_byte = 8'd115;
+            8'd193: out_byte = 8'd117;
+            8'd194: out_byte = 8'd119;
+            8'd195: out_byte = 8'd120;
+            8'd196: out_byte = 8'd122;
+            8'd197: out_byte = 8'd124;
+            8'd198: out_byte = 8'd126;
+            8'd199: out_byte = 8'd127;
+            8'd200: out_byte = 8'd129;
+            8'd201: out_byte = 8'd131;
+            8'd202: out_byte = 8'd133;
+            8'd203: out_byte = 8'd135;
+            8'd204: out_byte = 8'd137;
+            8'd205: out_byte = 8'd138;
+            8'd206: out_byte = 8'd140;
+            8'd207: out_byte = 8'd142;
+            8'd208: out_byte = 8'd144;
+            8'd209: out_byte = 8'd146;
+            8'd210: out_byte = 8'd148;
+            8'd211: out_byte = 8'd150;
+            8'd212: out_byte = 8'd152;
+            8'd213: out_byte = 8'd154;
+            8'd214: out_byte = 8'd156;
+            8'd215: out_byte = 8'd158;
+            8'd216: out_byte = 8'd160;
+            8'd217: out_byte = 8'd162;
+            8'd218: out_byte = 8'd164;
+            8'd219: out_byte = 8'd167;
+            8'd220: out_byte = 8'd169;
+            8'd221: out_byte = 8'd171;
+            8'd222: out_byte = 8'd173;
+            8'd223: out_byte = 8'd175;
+            8'd224: out_byte = 8'd177;
+            8'd225: out_byte = 8'd180;
+            8'd226: out_byte = 8'd182;
+            8'd227: out_byte = 8'd184;
+            8'd228: out_byte = 8'd186;
+            8'd229: out_byte = 8'd189;
+            8'd230: out_byte = 8'd191;
+            8'd231: out_byte = 8'd193;
+            8'd232: out_byte = 8'd196;
+            8'd233: out_byte = 8'd198;
+            8'd234: out_byte = 8'd200;
+            8'd235: out_byte = 8'd203;
+            8'd236: out_byte = 8'd205;
+            8'd237: out_byte = 8'd208;
+            8'd238: out_byte = 8'd210;
+            8'd239: out_byte = 8'd213;
+            8'd240: out_byte = 8'd215;
+            8'd241: out_byte = 8'd218;
+            8'd242: out_byte = 8'd220;
+            8'd243: out_byte = 8'd223;
+            8'd244: out_byte = 8'd225;
+            8'd245: out_byte = 8'd228;
+            8'd246: out_byte = 8'd231;
+            8'd247: out_byte = 8'd233;
+            8'd248: out_byte = 8'd236;
+            8'd249: out_byte = 8'd239;
+            8'd250: out_byte = 8'd241;
+            8'd251: out_byte = 8'd244;
+            8'd252: out_byte = 8'd247;
+            8'd253: out_byte = 8'd249;
+            8'd254: out_byte = 8'd252;
+            8'd255: out_byte = 8'd255;
+        endcase
+    end
+
+endmodule

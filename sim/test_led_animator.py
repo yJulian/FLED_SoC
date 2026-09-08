@@ -78,6 +78,7 @@ async def reset_dut(dut, mem):
     dut.cfg_enable.value = 0
     dut.cfg_start_pulse.value = 0
     dut.cfg_loop.value = 0
+    dut.cfg_gamma_enable.value = 0  # raw passthrough by default; gamma has its own dedicated test
     await Timer(5 * CLK_PERIOD_PS, unit="ps")
     await RisingEdge(dut.clk)
     dut.rst_n.value = 1
@@ -253,6 +254,44 @@ async def test_looping_wraps_to_frame_zero(dut):
     for i, f in enumerate(observed_frames):
         assert f == (i % num_frames), f"loop sequence mismatch at step {i}: got frame {f}"
     dut._log.info("PASS: looping playback wraps back to frame 0 correctly")
+
+def gamma8(x, gamma=2.8):
+    """Same formula used to generate rtl/gamma_lut.v's table."""
+    v = round(255 * ((x / 255.0) ** gamma))
+    return max(0, min(255, v))
+
+@cocotb.test()
+async def test_gamma_correction_applied(dut):
+    """cfg_gamma_enable=1: the first pixel on the wire should be the
+    gamma_lut-corrected R/G/B bytes, not the raw memory bytes."""
+    mem = {}
+    await start_clock(dut)
+    await reset_dut(dut, mem)
+
+    base_addr = 0x40
+    raw_r, raw_g, raw_b = 0x80, 0x40, 0xC0  # picked to be far from both 0x00 and 0xFF fixed points
+    store_bytes(mem, base_addr, bytes([raw_r, raw_g, raw_b]))
+
+    dut.cfg_base_addr.value = base_addr
+    dut.cfg_led_count.value = 1
+    dut.cfg_frame_count.value = 1
+    dut.cfg_frame_interval.value = 50_000
+    dut.cfg_loop.value = 0
+    dut.cfg_gamma_enable.value = 1
+
+    await trigger_start(dut)
+
+    budget = 1 * 24 * (T1H + T1L) + 300
+    timeline = await sample_dout_timeline(dut, budget)
+
+    r, g, b = decode_first_pixel_grb(timeline)
+    exp_r, exp_g, exp_b = gamma8(raw_r), gamma8(raw_g), gamma8(raw_b)
+    dut._log.info(f"Raw bytes: R={raw_r:#04x} G={raw_g:#04x} B={raw_b:#04x}")
+    dut._log.info(f"Decoded (gamma-corrected) pixel: R={r:#04x} G={g:#04x} B={b:#04x}")
+    dut._log.info(f"Expected (gamma-corrected) pixel: R={exp_r:#04x} G={exp_g:#04x} B={exp_b:#04x}")
+    assert (r, g, b) == (exp_r, exp_g, exp_b), "gamma-corrected pixel mismatch"
+    assert (r, g, b) != (raw_r, raw_g, raw_b), "output equals raw bytes -- gamma correction not applied?"
+    dut._log.info("PASS: gamma correction applied correctly to the first pixel")
 
 def cycles_reset():
     return (SYS_CLK_FREQ_HZ // 1_000_000) * 300

@@ -20,3 +20,7 @@ uint32_t led_animator_is_busy(void) {
 uint32_t led_animator_get_current_frame(void) {
     return led_animator_current_frame_read();
 }
+
+void led_animator_set_gamma_enable(int enable) {
+    led_animator_gamma_enable_write(enable ? 1 : 0);
+}

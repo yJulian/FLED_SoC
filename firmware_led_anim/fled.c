@@ -79,13 +79,13 @@ int fled_load(const char *filename, uint8_t *buf, uint32_t buf_cap,
            (unsigned long)size, (unsigned long)buf_cap);
 
     if (size == 0 || size > buf_cap) {
-        printf("   [FAIL] Payload size out of range for the on-chip buffer.\n");
+        printf("   [FAIL] Payload size out of range for the RAM buffer.\n");
         f_close(&file);
         f_mount(0, "", 0);
         return FLED_ERR;
     }
 
-    printf("\n[STEP 3] Loading animation payload into SRAM...\n");
+    printf("\n[STEP 3] Loading animation payload into RAM...\n");
     fr = f_read(&file, buf, size, &nread);
     f_close(&file);
     f_mount(0, "", 0);
@@ -94,7 +94,7 @@ int fled_load(const char *filename, uint8_t *buf, uint32_t buf_cap,
                nread, (unsigned long)size, fresult_str(fr));
         return FLED_ERR;
     }
-    printf("   [PASS] Loaded %lu bytes into SRAM buffer at 0x%08lX\n",
+    printf("   [PASS] Loaded %lu bytes into RAM buffer at 0x%08lX\n",
            (unsigned long)size, (unsigned long)(uintptr_t)buf);
 
     *payload_size = size;

@@ -15,6 +15,8 @@
  *    displayed frame rate stays constant regardless of how quickly a frame
  *    is actually transmitted
  *  - Optional looping playback (wraps back to frame 0 after the last frame)
+ *  - Optional gamma correction (gamma_lut.v), applied per R/G/B byte before
+ *    handoff to the WS2812 driver, toggled by cfg_gamma_enable
  *  - Hardware completion interrupt pulse, once per displayed frame
  *  - Drives an internal ws2812_driver instance which performs the actual
  *    one-wire protocol bit-banging
@@ -51,6 +53,7 @@ module led_animator_controller #(
     input  wire         cfg_enable,         // level: while playing, 0 stops at the next frame boundary
     input  wire         cfg_start_pulse,    // one-cycle pulse (CSR write-strobe): (re)trigger playback from frame 0
     input  wire         cfg_loop,           // 1 = wrap at frame_count, 0 = stop after last frame
+    input  wire         cfg_gamma_enable,   // 1 = apply the gamma_lut correction to each R/G/B byte
 
     // Status
     output reg          status_busy,
@@ -91,6 +94,15 @@ module led_animator_controller #(
     reg [31:0] frame_timer; // cycles elapsed since the current frame started
 
     wire [7:0] cur_byte = word_buf[byte_addr[1:0]*8 +: 8];
+
+    // ---- gamma_lut instance: single shared combinational lookup, since the
+    // byte-stream reader only ever handles one R/G/B byte per cycle ----
+    wire [7:0] gamma_byte;
+    gamma_lut u_gamma_lut (
+        .in_byte  (cur_byte),
+        .out_byte (gamma_byte)
+    );
+    wire [7:0] cur_byte_corrected = cfg_gamma_enable ? gamma_byte : cur_byte;
 
     // ---- ws2812_driver instance & handshake signals ----
     reg  [23:0] led_pixel_data;
@@ -201,8 +213,8 @@ module led_animator_controller #(
                         state    <= ST_WORD_WAIT;
                     end else begin
                         case (byte_sub_idx)
-                            2'd0: pix_r <= cur_byte;
-                            2'd1: pix_g <= cur_byte;
+                            2'd0: pix_r <= cur_byte_corrected;
+                            2'd1: pix_g <= cur_byte_corrected;
                             default: ; // handled below (blue -> present pixel)
                         endcase
 
@@ -212,7 +224,7 @@ module led_animator_controller #(
                         end
 
                         if (byte_sub_idx == 2'd2) begin
-                            led_pixel_data  <= {pix_r, pix_g, cur_byte};
+                            led_pixel_data  <= {pix_r, pix_g, cur_byte_corrected};
                             led_pixel_valid <= 1'b1;
                             byte_sub_idx    <= 2'd0;
                             state           <= ST_PRESENT_PIXEL;

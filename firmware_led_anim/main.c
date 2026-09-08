@@ -2,17 +2,25 @@
  * Tang Nano 9K WS2812B LED Animation Player
  *
  * Reads a .fled animation file from the SDCard (SPI mode + FatFs, see
- * fled.c), loads its raw RGB frame payload into a small on-chip SRAM
- * buffer, then hands it to the autonomous LedAnimator DMA/WS2812B
- * hardware core (see led_animator.c), which streams it out to a WS2812B
- * strip at the file's declared frame rate entirely on its own (no CPU
- * polling needed once started).
+ * fled.c), loads its raw RGB frame payload into RAM, then hands it to the
+ * autonomous LedAnimator DMA/WS2812B hardware core (see led_animator.c),
+ * which streams it out to a WS2812B strip at the file's declared frame
+ * rate entirely on its own (no CPU polling needed once started).
+ *
+ * If this bitstream was built with the PSRAM frame buffer (the default --
+ * see hardware/soc_tang_nano_9k_led_anim.py's with_psram), the payload is
+ * loaded into the 4MB external PSRAM region instead of on-chip SRAM, so
+ * much larger/longer animations fit (PSRAM path is synthesis-verified but
+ * NOT yet confirmed on real hardware -- see that file's docstring). With
+ * --no-psram builds, CSR_PSRAM_BASE is undefined and this falls back to a
+ * small on-chip SRAM buffer, the always-verified path.
  */
 
 #include <stdio.h>
 #include <stdint.h>
 
 #include <generated/csr.h>
+#include <generated/mem.h>
 #include <libbase/uart.h>
 
 #include "fled.h"
@@ -21,11 +29,19 @@
 
 #define FLED_FILENAME "ANIM.FLED"
 
-// On-chip SRAM is tight (a few KB) -- this comfortably covers small test
-// animations (e.g. the 400-byte ANIM.FLED on the dev SD card) without
-// needing HyperRAM/PSRAM at all.
+#ifdef PSRAM_BASE
+// PSRAM-backed frame buffer: the file's raw RGB payload is streamed
+// straight from PSRAM by the LedAnimator DMA core, so this can hold much
+// longer/larger animations than on-chip SRAM ever could.
+#define FLED_MAX_PAYLOAD PSRAM_SIZE
+static uint8_t * const fled_payload = (uint8_t *)PSRAM_BASE;
+#else
+// No PSRAM in this bitstream -- on-chip SRAM is tight (a few KB), which
+// comfortably covers small test animations (e.g. the 400-byte ANIM.FLED
+// on the dev SD card) but nothing much larger.
 #define FLED_MAX_PAYLOAD 2048
 static uint8_t fled_payload[FLED_MAX_PAYLOAD] __attribute__((aligned(4)));
+#endif
 
 int main(void) {
     uart_init();

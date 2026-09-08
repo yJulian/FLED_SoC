@@ -29,6 +29,7 @@ class LedAnimator(LiteXModule):
         self.frame_interval = CSRStorage(32, description="sys_clk cycles between frame starts (sys_clk_freq / target FPS)")
         self.enable          = CSRStorage(1,  description="Write 1 to (re)start playback from frame 0; write 0 to stop at the next frame boundary")
         self.loop             = CSRStorage(1,  description="1 = wrap back to frame 0 after the last frame")
+        self.gamma_enable   = CSRStorage(1,  reset=1, description="1 = apply gamma=2.8 correction (gamma_lut.v) to each R/G/B byte before it is sent to the strip")
 
         # Status Registers
         self.busy          = CSRStatus(1,  description="1 while an animation is playing")
@@ -53,6 +54,7 @@ class LedAnimator(LiteXModule):
         # Add RTL Verilog sources
         rtl_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "rtl"))
         platform.add_source(os.path.join(rtl_dir, "ws2812_driver.v"))
+        platform.add_source(os.path.join(rtl_dir, "gamma_lut.v"))
         platform.add_source(os.path.join(rtl_dir, "led_animator_controller.v"))
 
         self.specials += Instance("led_animator_controller",
@@ -79,6 +81,7 @@ class LedAnimator(LiteXModule):
             i_cfg_enable          = self.enable.storage[0],
             i_cfg_start_pulse     = cfg_start_pulse,
             i_cfg_loop             = self.loop.storage[0],
+            i_cfg_gamma_enable  = self.gamma_enable.storage[0],
 
             # Status Outputs
             o_status_busy          = self.busy.status,
