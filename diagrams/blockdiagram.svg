@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2550 1650" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1.084567,0,0,0.889807,-68.466504,130.194755)">
+        <rect x="527.72" y="443.698" width="1380.717" height="674.303" style="fill:rgb(224,224,224);"/>
+        <path d="M1919.194,1131.112L516.963,1131.112L516.963,430.586L1919.194,430.586L1919.194,1131.112ZM1908.437,443.698L527.72,443.698L527.72,1118.001L1908.437,1118.001L1908.437,443.698Z"/>
+    </g>
+    <g transform="matrix(1,0,0,0.889807,1020.810869,702.051095)">
+        <g transform="matrix(20.833333,0,0,20.833333,866.78706,470.942083)">
+        </g>
+        <text x="551.073px" y="470.942px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:20.833px;">Gowin GW1NR-9C / <tspan x="744.015px 754.432px 766.018px " y="470.942px 470.942px 470.942px ">Tan</tspan>gNano 9k</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-716.220414,-169.337237)">
+        <g transform="matrix(50,0,0,50,1375.485144,748.252963)">
+        </g>
+        <text x="1239.352px" y="748.253px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:50px;">FPGA</text>
+    </g>
+    <g transform="matrix(0.696502,0,0,0.790361,414.835151,239.105587)">
+        <rect x="881.9" y="559.487" width="646.086" height="403.804" style="fill:rgb(187,187,187);"/>
+        <path d="M1544.736,978.052L865.149,978.052L865.149,544.726L1544.736,544.726L1544.736,978.052ZM1527.985,559.487L881.9,559.487L881.9,963.291L1527.985,963.291L1527.985,559.487Z"/>
+    </g>
+    <g transform="matrix(1.158087,0,0,1,1484.69524,103.505058)">
+        <path d="M372.522,745.144L384.983,759.575L365.812,737.373L384.983,715.17L372.522,729.602L562.064,729.602L562.064,715.17L581.236,737.373L562.064,759.575L562.064,745.144L372.522,745.144Z" style="fill:rgb(130,130,130);"/>
+    </g>
+    <g transform="matrix(1,0,0,1,-54.266457,81.78509)">
+        <text x="1169.882px" y="748.253px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:50px;">RISCV Core</text>
+        <g transform="matrix(50,0,0,50,1410.226355,805.74808)">
+        </g>
+        <text x="1204.611px" y="805.748px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:50px;">V<tspan x="1235.202px 1263.01px " y="805.748px 805.748px ">ex</tspan>Riscv</text>
+    </g>
+    <g transform="matrix(1.07428,0,0,1,-50.803597,60.028719)">
+        <g transform="matrix(0.432229,0,0,0.790361,205.148641,179.076868)">
+            <rect x="881.9" y="559.487" width="646.086" height="403.804" style="fill:rgb(187,187,187);"/>
+            <path d="M1553.111,978.052L856.774,978.052L856.774,544.726L1553.111,544.726L1553.111,978.052ZM1527.985,559.487L881.9,559.487L881.9,963.291L1527.985,963.291L1527.985,559.487Z"/>
+        </g>
+        <g transform="matrix(1,0,0,1,-582.753182,21.756371)">
+            <text x="1218.503px" y="748.253px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:50px;">SDCard</text>
+            <g transform="matrix(50,0,0,50,1404.69657,805.74808)">
+            </g>
+            <text x="1210.141px" y="805.748px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:50px;">Interface</text>
+        </g>
+    </g>
+    <g transform="matrix(0.464335,0,0,0.790361,-330.493934,239.105587)">
+        <rect x="881.9" y="559.487" width="646.086" height="403.804" style="fill:rgb(187,187,187);"/>
+        <path d="M1553.111,978.052L856.774,978.052L856.774,544.726L1553.111,544.726L1553.111,978.052ZM1527.985,559.487L881.9,559.487L881.9,963.291L1527.985,963.291L1527.985,559.487Z"/>
+    </g>
+    <g transform="matrix(0.464335,0,0,0.790361,1766.365736,239.105587)">
+        <rect x="881.9" y="559.487" width="646.086" height="403.804" style="fill:rgb(187,187,187);"/>
+        <path d="M1553.111,978.052L856.774,978.052L856.774,544.726L1553.111,544.726L1553.111,978.052ZM1527.985,559.487L881.9,559.487L881.9,963.291L1527.985,963.291L1527.985,559.487Z"/>
+    </g>
+    <g transform="matrix(1.07428,0,0,1,-1174.7965,110.520441)">
+        <g transform="matrix(50,0,0,50,1396.334754,748.252963)">
+        </g>
+        <text x="1218.503px" y="748.253px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:50px;">SDCard</text>
+    </g>
+    <g transform="matrix(0.728184,0,0,0.728184,133.452768,281.11898)">
+        <g transform="matrix(41.666667,0,0,41.666667,478.116528,750.199049)">
+        </g>
+        <text x="410.958px" y="750.199px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:41.667px;">SPI</text>
+    </g>
+    <g transform="matrix(0.573391,0,0,0.573391,1784.889828,397.323408)">
+        <g transform="matrix(41.666667,0,0,41.666667,570.767895,750.199049)">
+        </g>
+        <text x="410.958px" y="750.199px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:41.667px;">WS2812</text>
+    </g>
+    <g transform="matrix(1,0,0,1,1042.748945,60.028719)">
+        <g transform="matrix(0.432229,0,0,0.790361,205.148641,179.076868)">
+            <rect x="881.9" y="559.487" width="646.086" height="403.804" style="fill:rgb(187,187,187);"/>
+            <path d="M1554.977,978.052L854.908,978.052L854.908,544.726L1554.977,544.726L1554.977,978.052ZM1527.985,559.487L881.9,559.487L881.9,963.291L1527.985,963.291L1527.985,559.487Z"/>
+        </g>
+        <g transform="matrix(1,0,0,1,-580.446053,21.756371)">
+            <text x="1211.533px" y="748.253px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:50px;">WS2812</text>
+            <g transform="matrix(50,0,0,50,1374.081336,805.74808)">
+            </g>
+            <text x="1240.756px" y="805.748px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:50px;">Driver</text>
+        </g>
+    </g>
+    <g transform="matrix(0.767619,0,0,1,115.397769,103.505058)">
+        <path d="M394.736,745.144L394.736,759.575L365.812,737.373L394.736,715.17L394.736,729.602L552.312,729.602L552.312,715.17L581.236,737.373L552.312,759.575L552.312,745.144L394.736,745.144Z" style="fill:rgb(130,130,130);"/>
+    </g>
+    <g transform="matrix(0.516708,0,0,1,709.29054,103.505058)">
+        <path d="M408.781,745.144L408.781,759.575L365.812,737.373L408.781,715.17L408.781,729.602L538.267,729.602L538.267,715.17L581.236,737.373L538.267,759.575L538.267,745.144L408.781,745.144Z" style="fill:rgb(130,130,130);"/>
+    </g>
+    <g transform="matrix(0.516708,0,0,1,1307.698354,103.505058)">
+        <path d="M408.781,745.144L408.781,759.575L365.812,737.373L408.781,715.17L408.781,729.602L538.267,729.602L538.267,715.17L581.236,737.373L538.267,759.575L538.267,745.144L408.781,745.144Z" style="fill:rgb(130,130,130);"/>
+    </g>
+    <g transform="matrix(1,0,0,1,-67.443699,97.135143)">
+        <text x="2311.714px" y="735.604px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:37.5px;">WS2812b</text>
+        <g transform="matrix(37.5,0,0,37.5,2498.252911,778.725053)">
+        </g>
+        <text x="2289.861px" y="778.725px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:37.5px;">ARGB LEDs</text>
+    </g>
+</svg>

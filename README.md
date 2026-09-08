@@ -16,6 +16,8 @@ below.
 
 ## Hardware
 
+![Block Layout](./diagrams/blockdiagram.svg)
+
 - Sipeed Tang Nano 9K (Gowin GW1NR-LV9QN88PC6/I5)
 - A FAT/FAT32-formatted micro-SD card in the board's SPI-mode slot
 - A WS2812B strip, data line on **J7 pin 49**, with a common ground to the
