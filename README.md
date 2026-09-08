@@ -1,4 +1,4 @@
-# Tang Nano 9K — SDCard + WS2812B LED Animation Player
+# Tang Nano 9K LED Animator
 
 A small LiteX RISC-V SoC for the Sipeed Tang Nano 9K (Gowin GW1NR-9C) that
 reads a `.fled` animation file from an SD card and plays it out to a
@@ -7,11 +7,12 @@ CPU loads the file once and configures the hardware; playback then runs
 entirely on its own.
 
 Split out from a larger Tang Nano 20K accelerator project as its own
-self-contained repo. Verified in cocotb simulation and confirmed running on
-real Tang Nano 9K hardware (SD card mount + read, header parse, DMA
-autonomously pacing frames) — the physical WS2812 pin itself has **not**
-been visually verified yet, since no LED strip was attached during
-bring-up. See [Status / caveats](#status--caveats) below.
+self-contained repo (`tang_nano_9k_led_animator`). Verified in cocotb
+simulation and confirmed running on real Tang Nano 9K hardware (SD card
+mount + read, header parse, DMA autonomously pacing frames) — the physical
+WS2812 pin itself has **not** been visually verified yet, since no LED
+strip was attached during bring-up. See [Status / caveats](#status--caveats)
+below.
 
 ## Hardware
 
