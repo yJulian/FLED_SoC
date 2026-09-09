@@ -23,8 +23,8 @@ Everything is SRAM-only (JTAG) programming -- nothing is ever written to the
 board's SPI flash, so a bad build only requires re-programming, never a
 recovery flash.
 
-See README.md for the full story (why VexRiscv-minimal not Ibex, the on-chip
-memory budget, etc).
+See CLAUDE.md for the design-rationale history (why VexRiscv-minimal not
+Ibex, the on-chip memory budget, etc).
 """
 
 import os

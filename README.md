@@ -38,9 +38,14 @@ flowchart LR
         direction LR
         SDIF["SDCard<br/>Interface"]
         CPU["RISCV Core<br/>VexRiscv"]
-        GAMMA["Gamma LUT"]
+        RAM[("SRAM / PSRAM<br/>frame buffer")]
+        DMA["LedAnimator<br/>DMA + Gamma LUT"]
         WS["WS2812<br/>Driver"]
-        SDIF --> CPU --> GAMMA --> WS
+        SDIF --> CPU
+        CPU -- "loads .fled once" --> RAM
+        CPU -. "configure CSRs" .-> DMA
+        RAM -- "autonomous reads" --> DMA
+        DMA --> WS
     end
 
     SD -- SPI --> SDIF
@@ -62,20 +67,16 @@ flowchart LR
 | `sdcard` | `hardware/soc_tang_nano_9k_sdcard.py` | Mounts the SD card and lists its root directory over UART (feasibility test) |
 | `led_anim` | `hardware/soc_tang_nano_9k_led_anim.py` | (default) Reads `ANIM.FLED` from the SD card and plays it on the LED strip |
 
-Both use a RISC-V **VexRiscv "minimal"** core (RV32I, no MMU/mul/div) —
-**not Ibex**: Ibex was tried first and does not fit this device (real Gowin
-synthesis needs 18571 DFFs against the GW1NR-9C's 6693 DFF budget).
+Both use a RISC-V **VexRiscv "minimal"** core (RV32I, no MMU/mul/div), the
+standard small-FPGA CPU choice for a device this size.
 
-Both also skip the interactive LiteX BIOS entirely. This device's usable
-on-chip block RAM is small — early attempts at a full BIOS (~27KB, ROM
-auto-sized) plus a separate main_ram blew LUT usage far past budget (the
-excess silently falls back to LUT-based distributed RAM, ~1 LUT per few
-bits). The fix: our firmware is linked BIOS-style (`.text`/`.rodata`
-execute directly from ROM, see `firmware_*/linker.ld`) and passed to LiteX
-as `integrated_rom_init`, so it *is* the ROM content — no BIOS, no
-serialboot, no separate main_ram, and no persistent SPI-flash write. Every
-build/program cycle is pure SRAM-only JTAG configuration, fully reversible
-by re-programming. (The PSRAM frame buffer added since, below, is a
+Both also skip the interactive LiteX BIOS entirely: our firmware is linked
+BIOS-style (`.text`/`.rodata` execute directly from ROM, see
+`firmware_*/linker.ld`) and passed to LiteX as `integrated_rom_init`, so it
+*is* the ROM content — no BIOS, no serialboot, no separate main_ram, and no
+persistent SPI-flash write. Every build/program cycle is pure SRAM-only
+JTAG configuration, fully reversible by re-programming. (The PSRAM frame
+buffer added since, below, is a
 separate opt-in bus region for animation *data* only — it does not change
 any of this boot-time story, and needs no software calibration step
 either: LiteX's `HyperRAM` core self-times the protocol from RTL.)

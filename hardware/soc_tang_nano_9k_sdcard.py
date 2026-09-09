@@ -23,28 +23,14 @@ class TangNano9KSDCardSoC(TangNano9KBaseSoC):
     this board are enough to mount a FAT filesystem and list the files in
     its root directory over the UART console.
 
-    NOTE: Ibex (used successfully on the bigger Tang Nano 20K/GW2AR-18 in
-    this project) does NOT fit here: real Gowin synthesis hit 18571 DFFs
-    against this device's 6693 DFF budget (~2.8x over). VexRiscv's "minimal"
-    variant is the standard small-FPGA choice instead and fits comfortably.
-
-    NOTE: two on-chip-memory attempts (ROM ~27.4KB auto-sized BIOS + sram 8KB
-    + main_ram 32KB, then trimmed to sram 4KB + main_ram 16KB) both blew LUT
-    usage way past the 8640 budget (31011, then 22557 LUTs). The GW1NR-9C's
-    real embedded-BRAM budget is far smaller than these combined requests,
-    so nearly all of it fell back to LUT-based distributed RAM. Regression
-    from those two data points puts the fit ceiling at roughly ~14.5KB of
-    *total* on-chip memory for this design -- nowhere near enough for a full
-    LiteX BIOS (~27KB) plus a separate main_ram.
-
-    Fix: skip the BIOS + serialboot two-stage flow entirely. Our firmware
-    (firmware_sdcard_ls/, linked BIOS-style to execute directly from ROM,
-    see its linker.ld) is passed in as `integrated_rom_init`, so it IS the
-    ROM content -- no separate main_ram needed at all, and no interactive
-    BIOS shell overhead. Total on-chip memory: ROM (~our firmware's size,
-    auto-sized) + a small sram for .data/.bss/stack. This also avoids
-    HyperRAM/PSRAM calibration and any persistent SPI-flash write -- pure
-    SRAM-only JTAG load, matching how this project has always worked so far.
+    Skips the interactive LiteX BIOS + serialboot flow entirely: our
+    firmware (firmware_sdcard_ls/, linked BIOS-style to execute directly
+    from ROM, see its linker.ld) is passed in as `integrated_rom_init`, so
+    it IS the ROM content -- no separate main_ram needed at all, and no
+    interactive BIOS shell overhead. This also avoids HyperRAM/PSRAM
+    calibration and any persistent SPI-flash write -- pure SRAM-only JTAG
+    load. See CLAUDE.md for the rationale behind the CPU and memory choices
+    below.
       - RISC-V VexRiscv CPU core (variant "minimal": RV32I, no MMU/mul/div)
       - ROM = our firmware directly (no separate BIOS, no main_ram)
       - UART Serial Console
